@@ -9,23 +9,10 @@ class World extends Component {
 
         let startrows =40
         let startcols = 60
-        let roomWidth, roomHeight, x, y
-
+        let rooms = []
         let arr = Array(startrows).fill().map(()=>Array(startcols).fill(0));
-        //console.log(arr)
-        let rooms = (Math.floor(Math.random() * 4) + 4)
-       // let rooms = 2
-        //make 4-8 random rooms
-        for (let i=0; i< rooms; i++) {
-            //random height & width between 6 & 12
-             roomWidth = Math.floor(Math.random() * 6) + 6
-             roomHeight = Math.floor(Math.random() * 6) + 6
-            //random start min 1 & max start - size
-             x = Math.floor(Math.random() * (startcols - roomWidth))
-             y = Math.floor(Math.random() * (startrows - roomHeight))
-            console.log("New Room Coords:" +  x, y, roomWidth, roomHeight)
-            this.createRoom(arr, x, y, roomWidth, roomHeight)
-        }
+        this.generateRooms(arr, startrows, startcols, rooms)
+        this.drawRooms(arr, rooms)
 
         this.state=({
             world: arr,
@@ -35,14 +22,45 @@ class World extends Component {
 
     }
 
-    createRoom = (arr,colstart,rowstart,width,height) => {
-        console.log("creating Room")
-        for (let i=0; i<height; i++) {
-            for (let j=0;j<width;j++) {
-                arr[i+rowstart][j+colstart] = 1
-            }
+    generateRooms = (arr, startrows, startcols, rooms) => {
+        let roomWidth, roomHeight, x, y
+        let numRooms = (Math.floor(Math.random() * 4) + 4)
+        let newRoom = {}
+
+        for (let i=0; i< numRooms; i++) {
+            roomWidth = Math.floor(Math.random() * 6) + 6
+            roomHeight = Math.floor(Math.random() * 6) + 6
+            x = Math.floor(Math.random() * (startcols - roomWidth))
+            y = Math.floor(Math.random() * (startrows - roomHeight))
+
+            newRoom = {"x":x, "y": y, "width": roomWidth, "height": roomHeight}
+            rooms.push(newRoom)
         }
+
+
+
+        console.log("Rooms: " , rooms)
     }
+
+    drawRooms = (arr, rooms) =>{
+        rooms.forEach((room)=>{
+            console.log("creating Room")
+            for (let i=0; i<room.height; i++) {
+                for (let j=0;j<room.width;j++) {
+                    arr[i+room.y][j+room.x] = 1
+                }
+            }
+        })
+    }
+
+    //drawRoom = (arr,colstart,rowstart,width,height) => {
+    //    console.log("creating Room")
+    //    for (let i=0; i<height; i++) {
+    //        for (let j=0;j<width;j++) {
+    //            arr[i+rowstart][j+colstart] = 1
+    //        }
+    //    }
+    //}
 
 
     generateBlankWorld = () => {
