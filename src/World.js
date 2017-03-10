@@ -21,8 +21,8 @@ class World extends Component {
              roomWidth = Math.floor(Math.random() * 6) + 6
              roomHeight = Math.floor(Math.random() * 6) + 6
             //random start min 1 & max start - size
+             x = Math.floor(Math.random() * (startcols - roomWidth))
              y = Math.floor(Math.random() * (startrows - roomHeight))
-            x = Math.floor(Math.random() * (startcols - roomWidth))
             console.log("New Room Coords:" +  x, y, roomWidth, roomHeight)
             this.createRoom(arr, x, y, roomWidth, roomHeight)
         }
@@ -37,9 +37,9 @@ class World extends Component {
 
     createRoom = (arr,colstart,rowstart,width,height) => {
         console.log("creating Room")
-        for (let i=0; i<width; i++) {
-            for (let j=0;j<height;j++) {
-                arr[i+colstart][j+rowstart] = 1
+        for (let i=0; i<height; i++) {
+            for (let j=0;j<width;j++) {
+                arr[i+rowstart][j+colstart] = 1
             }
         }
     }
