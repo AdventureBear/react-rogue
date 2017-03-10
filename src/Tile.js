@@ -20,9 +20,6 @@ class Tile extends Component {
     }
 }
 
-Tile.propTypes = {
-    numRows: React.PropTypes.number,
-    numCols: React.PropTypes.number
-};
+
 
 export default Tile

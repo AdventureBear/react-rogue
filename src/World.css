@@ -23,32 +23,32 @@ table {
     background-color: #000066;
 }
 
-span {
-    min-width: 12px;
+td {
+    min-width: 10px;
 }
 
-span.floor {
+td.floor {
     background-color: #ECE9E9;
 }
 
-span.wall {
+td.wall {
     background-color: darkgreen;
 
 }
 
-span.char {
+td.char {
     background-color: lightgreen;
 }
 
-span.toy {
+td.toy {
     background-color: yellow;
 
 }
 
-span.trick {
+td.trick {
     background-color: red;
 }
 
-span.exit{
+td.exit{
     background-color: #b10dc9;
 }

@@ -1,22 +1,49 @@
 import React, { Component } from 'react'
-import Tile from './Tile'
+
 import './World.css'
 
 class World extends Component {
+
     constructor(props){
         super(props)
 
         let startrows =40
         let startcols = 60
+        let roomWidth, roomHeight, x, y
 
         let arr = Array(startrows).fill().map(()=>Array(startcols).fill(0));
-        console.log(arr)
+        //console.log(arr)
+        let rooms = (Math.floor(Math.random() * 4) + 4)
+       // let rooms = 2
+        //make 4-8 random rooms
+        for (let i=0; i< rooms; i++) {
+            //random height & width between 6 & 12
+             roomWidth = Math.floor(Math.random() * 6) + 6
+             roomHeight = Math.floor(Math.random() * 6) + 6
+            //random start min 1 & max start - size
+             x = Math.floor(Math.random() * (startrows - roomHeight))
+            y = Math.floor(Math.random() * (startcols - roomWidth))
+            console.log("New Room Coords:" +  x, y, roomWidth, roomHeight)
+            this.createRoom(arr, x, y, roomWidth, roomHeight)
+        }
+
         this.state=({
             world: arr,
             height: startrows,
             width: startcols
         })
+
     }
+
+    createRoom = (arr,colstart,rowstart,width,height) => {
+        console.log("creating Room")
+        for (let i=0; i<width; i++) {
+            for (let j=0;j<height;j++) {
+                arr[i+colstart][j+rowstart] = 1
+            }
+        }
+    }
+
 
     generateBlankWorld = () => {
         const rows = this.state.height
@@ -42,19 +69,29 @@ class World extends Component {
         for (var i = 0; i < this.state.height; i++) {
             Object_row = []
             for (var j= 0; j<this.state.width; j++) {
-                Object_row.push(
-                  <td  key={j + i*10}
-                       className='component-tile'>
+                if (this.state.world[i][j]===0){
+                    Object_row.push(
+                      <td  key={j + i*10}
+                           className='component-tile wall'>
                       <span></span>
-                  </td>
-                )
-                console.log("Object Row:" + Object_row)
+                      </td>
+                    )
+                    } else {
+                    Object_row.push(
+                      <td  key={j + i*10}
+                           className='component-tile floor'>
+                          <span></span>
+                      </td>
+                    )
+                }
+                //console.log("Object Row:" + Object_row)
 
             }
             fullBoard.push(<tr key={i}>{Object_row}</tr>)
         }
 
-        console.log("Board: " + fullBoard)
+        //console.log("Board: " + fullBoard)
+
         return (
             <div className='component-world'>
                 <table>
