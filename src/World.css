@@ -1,0 +1,54 @@
+.component-world {
+    background:
+    radial-gradient(black 15%, transparent 16%) 0 0,
+    radial-gradient(black 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+    background-color:#282828;
+    background-size:16px 16px;
+
+    padding-bottom: 60px;
+}
+
+table {
+    margin: 0 auto;
+    text-align: center;
+    background-color: #3f3d8b;
+    min-width: 600px;
+}
+
+.component-tile{
+    width: 10px;
+    height: 10px;
+    background-color: #000066;
+}
+
+span {
+    min-width: 12px;
+}
+
+span.floor {
+    background-color: #ECE9E9;
+}
+
+span.wall {
+    background-color: darkgreen;
+
+}
+
+span.char {
+    background-color: lightgreen;
+}
+
+span.toy {
+    background-color: yellow;
+
+}
+
+span.trick {
+    background-color: red;
+}
+
+span.exit{
+    background-color: #b10dc9;
+}
