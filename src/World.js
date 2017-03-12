@@ -132,13 +132,13 @@ class World extends Component {
     }
 
     createVCorridor=((arr, x, y1, y2)=>{
-        for (let j = y1; j < y2; j++) {
+        for (let j = y1; j <= y2; j++) {
             arr[j][x]= 1
         }
     })
 
     createHCorridor=((arr, y, x1, x2)=>{
-        for (let k = x1 ; k < x2; k++) {
+        for (let k = x1 ; k <= x2; k++) {
             arr[y][k]= 1
         }
     })
