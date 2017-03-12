@@ -11,8 +11,8 @@ class World extends Component {
         let startcols = 60
         let rooms = []
         let arr = Array(startrows).fill().map(()=>Array(startcols).fill(0));
-        //this.generateRooms(arr, startrows, startcols, rooms)
-        rooms = this.fillTestRooms()
+        this.generateRooms(arr, startrows, startcols, rooms)
+        //rooms = this.fillTestRooms()
         this.drawRooms(arr, rooms)
         this.drawCorridors(arr,rooms)
 
@@ -48,7 +48,7 @@ class World extends Component {
             x = Math.floor(Math.random() * (startcols - roomWidth))     // col origin
             y = Math.floor(Math.random() * (startrows - roomHeight))    // row origin
 
-            newRoom = {"left":x, "top": y, "right": x+roomWidth, "bottom": y+roomHeight}
+            newRoom = {"left":x, "top": y, "right": x+roomWidth, "bottom": y+roomHeight, "hcenter": x+(Math.floor(roomWidth/2)), "vcenter": y+(Math.floor(roomHeight/2))}
             this.checkIntersections(newRoom, rooms)
 
             //if (rooms.length>0) {
@@ -112,7 +112,6 @@ class World extends Component {
 
     drawCorridors = (arr, rooms) => {
         for (let i = 0; i< rooms.length-1; i++){
-            console.log(rooms[i]["vcenter"])
             let x = rooms[i]['hcenter']
             let y = rooms[i]['vcenter']
             let nextX = rooms[i+1]['hcenter']
@@ -123,23 +122,23 @@ class World extends Component {
             let y2  = Math.max(rooms[i]['vcenter'], rooms[i+1]['vcenter'])
             console.log(x1,x2, y1, y2)
             if ((Math.random() < 0.5)){
-                    this.createVCorridor(arr,x, y1, y2)
-                    this.createHCorridor(arr,nextY, x1, x2)
+                    this.createVCorridor(arr, x, y1, y2)
+                    this.createHCorridor(arr, nextY, x1, x2)
                } else {
-                    this.createHCorridor(arr,y,x1,x2)
-                    this.createVCorridor(arr,nextX,y1,y2)
+                    this.createHCorridor(arr, y, x1, x2)
+                    this.createVCorridor(arr, nextX, y1, y2)
                }
             }
     }
 
-    createVCorridor=((arr, x,y1,y2)=>{
-        for (let j=y1; j<y2; j++) {
+    createVCorridor=((arr, x, y1, y2)=>{
+        for (let j = y1; j < y2; j++) {
             arr[j][x]= 1
         }
     })
 
-    createHCorridor=((arr,y, x1, x2)=>{
-        for (let k=x1; k<x2; k++) {
+    createHCorridor=((arr, y, x1, x2)=>{
+        for (let k = x1 ; k < x2; k++) {
             arr[y][k]= 1
         }
     })
