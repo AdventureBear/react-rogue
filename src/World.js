@@ -41,15 +41,39 @@ class World extends Component {
         let numRooms = (Math.floor(Math.random() * 4) + 4)
         let newRoom = {}
 
-        for (let i=0; i< numRooms; i++) {
+        //for (let i=0; i< numRooms; i++) {
+        let i=0 
+        while (i<numRooms) {
             console.log("Building room: " + i + " of " + numRooms)
-            roomWidth = Math.floor(Math.random() * 6) +6                //width
-            roomHeight = Math.floor(Math.random() * 6) +6               //height
+            roomWidth = Math.floor(Math.random() * 6) + 6                //width
+            roomHeight = Math.floor(Math.random() * 6) + 6               //height
             x = Math.floor(Math.random() * (startcols - roomWidth))     // col origin
             y = Math.floor(Math.random() * (startrows - roomHeight))    // row origin
 
-            newRoom = {"left":x, "top": y, "right": x+roomWidth, "bottom": y+roomHeight, "hcenter": x+(Math.floor(roomWidth/2)), "vcenter": y+(Math.floor(roomHeight/2))}
-            this.checkIntersections(newRoom, rooms)
+            newRoom = {
+                "left": x,
+                "top": y,
+                "right": x + roomWidth,
+                "bottom": y + roomHeight,
+                "hcenter": x + (Math.floor(roomWidth / 2)),
+                "vcenter": y + (Math.floor(roomHeight / 2))
+            }
+
+            let failed = false
+            rooms.forEach((room)=> {
+                if (this.checkIntersections(newRoom, room)) {
+                    failed = true
+                }
+            })
+
+            if (!failed) {
+                rooms.push(newRoom)
+                i += 1
+            }
+        }
+            //}
+    }
+
 
             //if (rooms.length>0) {
             //    //console.log("Rooms array > 1")
@@ -61,40 +85,18 @@ class World extends Component {
             //}
 
 
-            rooms.push(newRoom)
-        }
+           // rooms.push(newRoom)
+        //}
         //console.log("Rooms: " , rooms)
-    }
+    //}
 
-    checkIntersections  = (r1, r2s)=> {
-            r2s.forEach((r2)=> {
+    checkIntersections  = (r1, r2)=> {
+                return (r1.left <= r2.right && r1.right >= r2.left &&
+                r1.top <= r2.bottom && r2.bottom >= r2.top)
+                //console.log("comparing rooms:")
+                //console.log("Room1: ", r1)
+                //console.log("Room2: ", r2)
 
-                console.log("comparing rooms:")
-                console.log("Room1: ", r1)
-                console.log("Room2: ", r2)
-
-                if (r1.left >(r2.right)) {
-                    console.log("Left edge clear")
-                    return true
-                }
-
-                if ((r1.right)<r2.left) {
-                    console.log("Right Edge Clear")
-                    return true
-                }
-
-                if ((r1.top)> (r2.bottom)){
-                    console.log("top edge clear")
-                    return true
-                }
-
-                if ((r1.bottom) < r1.top){
-                    console.log("bottom edge clear")
-                    return true
-                }
-
-
-            })
     }
 
     drawRooms = (arr, rooms) =>{
