@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
-
 import './World.css'
 
 class World extends Component {
-
     constructor(props){
         super(props)
 
         let startrows =40
         let startcols = 60
         let rooms = []
-        let arr = Array(startrows).fill().map(()=>Array(startcols).fill(0));
-        this.generateRooms(arr, startrows, startcols, rooms)
-        //rooms = this.fillTestRooms()
+        let items = []
+        let arr = Array(startrows).fill().map(()=>Array(startcols).fill(0))
+        this.generateRooms(arr, startrows, startcols, rooms, items)
+
         this.drawRooms(arr, rooms)
+        this.drawItems(arr, items)
         this.drawCorridors(arr,rooms)
+
+        //this.generateObjects(arr, rooms, entities)
 
         this.state=({
             world: arr,
@@ -24,31 +26,32 @@ class World extends Component {
 
     }
 
-    fillTestRooms = () => {
-        return ([
-            {left: 2, top: 22, right: 10, bottom: 31, vcenter:27 , hcenter: 6},
-            {left: 15, top: 26, right: 21, bottom: 37, vcenter:31, hcenter:18},
-            {left: 25, top: 28, right: 35, bottom: 36, vcenter:32, hcenter:30},
-            {left: 36, top: 14, right: 44, bottom: 20, vcenter:17, hcenter:40},
-            {left: 44, top: 22, right: 54, bottom: 29, vcenter:25, hcenter:49},
-            {left: 45, top: 7, right: 54, bottom: 17, vcenter:12, hcenter:50}
-        ])
+    //*****Legend*******
+    //*0 Wall
+    //*1 Empty (room or corridor)
+    //*2 Player
+    //*3 Enemy (Trick)
+    //*4 Treats (Health)
+    //*5 Exit
+    //***********************
 
-    }
-
-    generateRooms = (arr, startrows, startcols, rooms) => {
-        let roomWidth, roomHeight, x, y
+    generateRooms = (arr, startrows, startcols, rooms, items) => {
+        let roomWidth, roomHeight, x, y, itemX, itemY
         let numRooms = (Math.floor(Math.random() * 4) + 4)
         let newRoom = {}
+        let newItem = {}
 
         //for (let i=0; i< numRooms; i++) {
-        let i=0 
+        let i=0
         while (i<numRooms) {
             console.log("Building room: " + i + " of " + numRooms)
             roomWidth = Math.floor(Math.random() * 6) + 6                //width
             roomHeight = Math.floor(Math.random() * 6) + 6               //height
             x = Math.floor(Math.random() * (startcols - roomWidth))     // col origin
             y = Math.floor(Math.random() * (startrows - roomHeight))    // row origin
+
+            itemX = x + Math.floor(Math.random()*roomWidth)
+            itemY = y + Math.floor(Math.random()*roomHeight)
 
             newRoom = {
                 "left": x,
@@ -68,35 +71,15 @@ class World extends Component {
 
             if (!failed) {
                 rooms.push(newRoom)
+                items.push(newItem)
                 i += 1
             }
         }
-            //}
     }
-
-
-            //if (rooms.length>0) {
-            //    //console.log("Rooms array > 1")
-            //    if (this.checkIntersections(newRoom, rooms)) {
-            //        rooms.push(newRoom)
-            //    }
-            //} else {
-            //    rooms.push(newRoom)
-            //}
-
-
-           // rooms.push(newRoom)
-        //}
-        //console.log("Rooms: " , rooms)
-    //}
 
     checkIntersections  = (r1, r2)=> {
                 return (r1.left <= r2.right && r1.right >= r2.left &&
                 r1.top <= r2.bottom && r2.bottom >= r2.top)
-                //console.log("comparing rooms:")
-                //console.log("Room1: ", r1)
-                //console.log("Room2: ", r2)
-
     }
 
     drawRooms = (arr, rooms) =>{
@@ -112,6 +95,17 @@ class World extends Component {
         })
     }
 
+    drawItems = (arr, items) =>{
+        items.forEach((item)=>{
+            console.log("creating item")
+            console.log(item)
+            let x = item[0]
+            let y = item[1]
+            arr[x][y] = 1
+            console.log(arr[x][y])
+        })
+    }
+
     drawCorridors = (arr, rooms) => {
         for (let i = 0; i< rooms.length-1; i++){
             let x = rooms[i]['hcenter']
@@ -122,7 +116,7 @@ class World extends Component {
             let x2  = Math.max(rooms[i]['hcenter'], rooms[i+1]['hcenter'])
             let y1  = Math.min(rooms[i]['vcenter'], rooms[i+1]['vcenter'])
             let y2  = Math.max(rooms[i]['vcenter'], rooms[i+1]['vcenter'])
-            console.log(x1,x2, y1, y2)
+            //console.log(x1, x2, y1, y2)
             if ((Math.random() < 0.5)){
                     this.createVCorridor(arr, x, y1, y2)
                     this.createHCorridor(arr, nextY, x1, x2)
@@ -145,6 +139,7 @@ class World extends Component {
         }
     })
 
+
     render(){
         let fullBoard = []
         let Object_row = []
@@ -158,10 +153,17 @@ class World extends Component {
                       <span></span>
                       </td>
                     )
-                    } else {
+                    } else if (this.state.world[i][j]===1){
                     Object_row.push(
                       <td  key={j + i*10}
                            className='component-tile floor'>
+                          <span></span>
+                      </td>
+                    )
+                } else if (this.state.world[i][j]===2) {
+                    Object_row.push(
+                      <td  key={j + i*10}
+                           className='component-tile char'>
                           <span></span>
                       </td>
                     )
@@ -169,6 +171,9 @@ class World extends Component {
             }
             fullBoard.push(<tr key={i}>{Object_row}</tr>)
         }
+
+
+
 
         return (
             <div className='component-world'>
