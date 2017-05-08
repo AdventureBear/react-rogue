@@ -20,6 +20,4 @@ class Tile extends Component {
     }
 }
 
-
-
 export default Tile

@@ -1,20 +1,24 @@
 import React, { Component } from 'react'
 import './World.css'
 
+let rooms = []
+let items = []
+
 class World extends Component {
     constructor(props){
         super(props)
 
         let startrows =40
         let startcols = 60
-        let rooms = []
-        let items = []
+
         let arr = Array(startrows).fill().map(()=>Array(startcols).fill(0))
         this.generateRooms(arr, startrows, startcols, rooms, items)
 
-        this.drawRooms(arr, rooms)
-        this.drawItems(arr, items)
-        this.drawCorridors(arr,rooms)
+      console.log("Rooms: ", rooms)
+      console.log("Items: ", items)
+        //this.drawRooms(arr, rooms)
+        //this.drawItems(arr, items)
+        //this.drawCorridors(arr,rooms)
 
         //this.generateObjects(arr, rooms, entities)
 
@@ -26,6 +30,16 @@ class World extends Component {
 
     }
 
+  componentWillMount() {
+
+    this.drawRooms(this.state.world)
+    //this.drawItems(this.state.world)
+    this.drawCorridors(this.state.world)
+
+  }
+
+
+    /*
     //*****Legend*******
     //*0 Wall
     //*1 Empty (room or corridor)
@@ -34,6 +48,7 @@ class World extends Component {
     //*4 Treats (Health)
     //*5 Exit
     //***********************
+    */
 
     generateRooms = (arr, startrows, startcols, rooms, items) => {
         let roomWidth, roomHeight, x, y, itemX, itemY
@@ -62,6 +77,11 @@ class World extends Component {
                 "vcenter": y + (Math.floor(roomHeight / 2))
             }
 
+            newItem = {
+                "x": itemX,
+                "y": itemY
+            }
+
             let failed = false
             rooms.forEach((room)=> {
                 if (this.checkIntersections(newRoom, room)) {
@@ -75,6 +95,7 @@ class World extends Component {
                 i += 1
             }
         }
+
     }
 
     checkIntersections  = (r1, r2)=> {
@@ -82,7 +103,7 @@ class World extends Component {
                 r1.top <= r2.bottom && r2.bottom >= r2.top)
     }
 
-    drawRooms = (arr, rooms) =>{
+    drawRooms = (arr) =>{
         rooms.forEach((room)=>{
             console.log("creating Room")
 
@@ -95,18 +116,19 @@ class World extends Component {
         })
     }
 
-    drawItems = (arr, items) =>{
+    drawItems = (arr) =>{
         items.forEach((item)=>{
             console.log("creating item")
             console.log(item)
-            let x = item[0]
-            let y = item[1]
-            arr[x][y] = 1
+            let x = item.x
+            let y = item.y
+            console.log("x: ", x, "y: ", y)
+            //arr[x][y] = 1
             console.log(arr[x][y])
         })
     }
 
-    drawCorridors = (arr, rooms) => {
+    drawCorridors = (arr) => {
         for (let i = 0; i< rooms.length-1; i++){
             let x = rooms[i]['hcenter']
             let y = rooms[i]['vcenter']
